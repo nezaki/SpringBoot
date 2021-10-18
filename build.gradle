@@ -1,8 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.5'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id "org.flywaydb.flyway" version "8.0.1"
+    id 'org.springframework.boot' version '2.5.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'org.flywaydb.flyway' version '8.0.1'
+    id 'checkstyle'
 }
 
 group = 'nezaki'
@@ -10,20 +11,26 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.5.11'
-	implementation 'javax.validation:validation-api:2.0.1.Final'
-	implementation 'mysql:mysql-connector-java:8.0.26'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.11'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'mysql:mysql-connector-java:8.0.26'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 }
 
 flyway {
-	url = 'jdbc:mysql://localhost:23306/'
-	user = 'root'
-	password = 'password'
-	schemas = ['springboot']
+    url = 'jdbc:mysql://localhost:23306/'
+    user = 'root'
+    password = 'password'
+    schemas = ['springboot']
+}
+
+apply plugin: 'checkstyle'
+checkstyle {
+    toolVersion '9.0'
+    configFile file('./check_style.xml')
 }
