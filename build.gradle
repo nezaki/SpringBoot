@@ -9,6 +9,7 @@ plugins {
 group = 'nezaki'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+targetCompatibility = '11'
 
 repositories {
     mavenCentral()
@@ -16,10 +17,10 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.5.5'
     implementation 'org.springdoc:springdoc-openapi-ui:1.5.11'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'mysql:mysql-connector-java:8.0.26'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 }
 
 flyway {
@@ -29,7 +30,6 @@ flyway {
     schemas = ['springboot']
 }
 
-apply plugin: 'checkstyle'
 checkstyle {
     toolVersion '9.0'
     configFile file('./check_style.xml')
