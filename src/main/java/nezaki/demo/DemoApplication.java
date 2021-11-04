@@ -15,7 +15,6 @@ public class DemoApplication {
     SpringApplication.run(DemoApplication.class, args);
   }
 
-
   @Bean
   public OpenAPI customOpenApi(@Value("3.0.3") String appVersion) {
     return new OpenAPI()
