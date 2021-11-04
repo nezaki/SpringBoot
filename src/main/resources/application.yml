@@ -1,6 +1,7 @@
 logging:
   level:
 #    root: debug
+    nezaki.demo: DEBUG
     web: DEBUG
     com.zaxxer.hikari: DEBUG
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
