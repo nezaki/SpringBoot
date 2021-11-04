@@ -19,19 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ExampleController {
 
-  @Autowired
-  private ExampleRepository exampleRepository;
+  @Autowired private ExampleRepository exampleRepository;
 
-  @Operation(summary = "operation summary",
+  @Operation(
+      summary = "operation summary",
       description = "operation description",
       tags = {"examples"})
-  @ApiResponses(value = {
-      @ApiResponse(
-          responseCode = "200",
-          description = "successful operation",
-          content = @Content(schema = @Schema(implementation = ExampleSchema.class)))
-  })
-  @GetMapping(value = "/exmaples", produces = {"application/json"})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "successful operation",
+            content = @Content(schema = @Schema(implementation = ExampleSchema.class)))
+      })
+  @GetMapping(
+      value = "/exmaples",
+      produces = {"application/json"})
   public ExampleSchema getExample() {
     List<ExampleTable> list = exampleRepository.getAll();
     return new ExampleSchema(1, "content value", 100, true, new Date());

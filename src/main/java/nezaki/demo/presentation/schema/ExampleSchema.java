@@ -9,11 +9,7 @@ import javax.validation.constraints.Size;
 
 public class ExampleSchema {
 
-  @Schema(
-      title = "id title",
-      description = "id description",
-      example = "1",
-      required = true)
+  @Schema(title = "id title", description = "id description", example = "1", required = true)
   private final long id;
 
   @Schema(
@@ -46,12 +42,12 @@ public class ExampleSchema {
   @Schema(
       title = "exampleDatetime title",
       description = "exampleDatetime description",
-//      example = "2021/01/01T01:02:03.456Z",
+      // example = "2021/01/01T01:02:03.456Z",
       required = true)
   private final Date exampleDatetime;
 
-  public ExampleSchema(long id, String content, int exampleNumber, boolean exampleBoolean,
-                       Date exampleDatetime) {
+  public ExampleSchema(
+      long id, String content, int exampleNumber, boolean exampleBoolean, Date exampleDatetime) {
     this.id = id;
     this.exampleString = content;
     this.exampleNumber = exampleNumber;

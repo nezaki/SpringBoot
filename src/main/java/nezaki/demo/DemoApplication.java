@@ -7,7 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-
 @SpringBootApplication
 public class DemoApplication {
 
@@ -18,11 +17,10 @@ public class DemoApplication {
   @Bean
   public OpenAPI customOpenApi(@Value("3.0.3") String appVersion) {
     return new OpenAPI()
-        .info(new Info()
-            .title("Demo API title")
-            .version(appVersion)
-            .description("Demo API Description")
-        );
+        .info(
+            new Info()
+                .title("Demo API title")
+                .version(appVersion)
+                .description("Demo API Description"));
   }
-
 }

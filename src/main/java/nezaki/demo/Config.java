@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 public class Config {
 
   @Bean
-  public FilterRegistrationBean demoFilter1(){
+  public FilterRegistrationBean filter() {
+    @SuppressWarnings("unchecked")
     FilterRegistrationBean bean = new FilterRegistrationBean(new RequestFilter());
     bean.addUrlPatterns("/*");
     bean.setOrder(1);
     return bean;
   }
-
 }

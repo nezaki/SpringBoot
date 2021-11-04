@@ -13,11 +13,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) {
-    web
-        .debug(true)
-        .ignoring()
-        .antMatchers("/**")
-    ;
+    web.debug(true).ignoring().antMatchers("/**");
   }
 
   @Bean
