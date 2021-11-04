@@ -1,6 +1,9 @@
 logging:
   level:
-    root: DEBUG
+#    root: debug
+    web: DEBUG
+    com.zaxxer.hikari: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
 
 spring:
   datasource:
@@ -8,6 +11,16 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 15000
+      connection-test-query: SELECT 1 FROM DUAL
+      maximum-pool-size: 8
+      minimum-idle: 10
+      idle-timeout: 100000
+      leak-detection-threshold: 5000
+      read-only: false
+      auto-commit: false
 
 server:
   port: 18080
