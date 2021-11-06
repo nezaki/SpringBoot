@@ -1,6 +1,5 @@
 package nezaki.demo.infrastructure.repository;
 
-import java.util.List;
 import nezaki.demo.infrastructure.entity.ExampleTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -11,16 +10,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ExampleRepository {
 
-  private final JdbcTemplate jdbcTemplate;
+  @Autowired private JdbcTemplate jdbc;
 
-  @Autowired
-  public ExampleRepository(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
-  }
-
-  public List<ExampleTable> getAll() {
-    String sql = "select * from example";
+  public ExampleTable selectOne(int id) {
+    String sql = "select * from example where id = ?";
     RowMapper<ExampleTable> rowMapper = new BeanPropertyRowMapper<ExampleTable>(ExampleTable.class);
-    return jdbcTemplate.query(sql, rowMapper);
+    return jdbc.queryForObject(sql, rowMapper, id);
   }
 }

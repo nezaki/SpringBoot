@@ -7,12 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Date;
-import java.util.List;
 import nezaki.demo.infrastructure.entity.ExampleTable;
 import nezaki.demo.infrastructure.repository.ExampleRepository;
 import nezaki.demo.presentation.schema.ExampleSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Examples", description = "example api description")
@@ -33,10 +33,15 @@ public class ExampleController {
             content = @Content(schema = @Schema(implementation = ExampleSchema.class)))
       })
   @GetMapping(
-      value = "/exmaples",
+      value = "/exmaples/{exampleId}",
       produces = {"application/json"})
-  public ExampleSchema getExample() {
-    List<ExampleTable> list = exampleRepository.getAll();
-    return new ExampleSchema(1, "content value", 100, true, new Date());
+  public ExampleSchema getExample(@PathVariable int exampleId) {
+    ExampleTable example = exampleRepository.selectOne(exampleId);
+    return new ExampleSchema(
+        example.getId(),
+        example.getExampleString(),
+        example.getExampleNumber(),
+        example.isExampleBoolean(),
+        new Date());
   }
 }
