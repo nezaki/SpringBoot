@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Date;
 import nezaki.demo.infrastructure.entity.ExampleTable;
 import nezaki.demo.infrastructure.repository.ExampleRepository;
 import nezaki.demo.presentation.schema.ExampleSchema;
@@ -42,6 +41,6 @@ public class ExampleController {
         example.getExampleString(),
         example.getExampleNumber(),
         example.isExampleBoolean(),
-        new Date());
+        example.getExampleDatetime());
   }
 }
