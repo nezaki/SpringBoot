@@ -12,6 +12,7 @@ import nezaki.demo.presentation.schema.ExampleSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Examples", description = "example api description")
@@ -36,11 +37,6 @@ public class ExampleController {
       produces = {"application/json"})
   public ExampleSchema getExample(@PathVariable int exampleId) {
     ExampleTable example = exampleRepository.selectOne(exampleId);
-    return new ExampleSchema(
-        example.getId(),
-        example.getExampleString(),
-        example.getExampleNumber(),
-        example.isExampleBoolean(),
-        example.getExampleDatetime());
+    return new ExampleSchema(example);
   }
 }

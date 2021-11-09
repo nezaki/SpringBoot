@@ -6,6 +6,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import nezaki.demo.infrastructure.entity.ExampleTable;
 
 public class ExampleSchema {
 
@@ -47,12 +48,24 @@ public class ExampleSchema {
   private final Date exampleDatetime;
 
   public ExampleSchema(
-      long id, String content, int exampleNumber, boolean exampleBoolean, Date exampleDatetime) {
+      long id,
+      String exampleString,
+      int exampleNumber,
+      boolean exampleBoolean,
+      Date exampleDatetime) {
     this.id = id;
-    this.exampleString = content;
+    this.exampleString = exampleString;
     this.exampleNumber = exampleNumber;
     this.exampleBoolean = exampleBoolean;
     this.exampleDatetime = exampleDatetime;
+  }
+
+  public ExampleSchema(ExampleTable exampleTable) {
+    this.id = exampleTable.getId();
+    this.exampleString = exampleTable.getExampleString();
+    this.exampleNumber = exampleTable.getExampleNumber();
+    this.exampleBoolean = exampleTable.isExampleBoolean();
+    this.exampleDatetime = exampleTable.getExampleDatetime();
   }
 
   public long getId() {
