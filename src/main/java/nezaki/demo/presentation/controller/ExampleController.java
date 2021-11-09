@@ -8,11 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import nezaki.demo.infrastructure.entity.ExampleTable;
 import nezaki.demo.infrastructure.repository.ExampleRepository;
+import nezaki.demo.infrastructure.webapiexample.entity.Ip;
+import nezaki.demo.infrastructure.webapiexample.repository.IpRepository;
 import nezaki.demo.presentation.schema.ExampleSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Examples", description = "example api description")
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExampleController {
 
   @Autowired private ExampleRepository exampleRepository;
+
+  @Autowired private IpRepository ipRepository;
 
   @Operation(
       summary = "operation summary",
@@ -36,6 +39,8 @@ public class ExampleController {
       value = "/exmaples/{exampleId}",
       produces = {"application/json"})
   public ExampleSchema getExample(@PathVariable int exampleId) {
+    Ip ip = ipRepository.get();
+
     ExampleTable example = exampleRepository.selectOne(exampleId);
     return new ExampleSchema(example);
   }
