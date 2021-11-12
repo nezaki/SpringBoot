@@ -18,13 +18,25 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
 *.iml
 *.ipr
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+.idea/.gitignore
+.idea/.name
+.idea/jarRepositories.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
 
 ### NetBeans ###
 /nbproject/private/
