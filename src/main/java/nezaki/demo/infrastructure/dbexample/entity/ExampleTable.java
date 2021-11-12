@@ -1,4 +1,4 @@
-package nezaki.demo.infrastructure.entity;
+package nezaki.demo.infrastructure.dbexample.entity;
 
 import java.util.Date;
 import lombok.Getter;

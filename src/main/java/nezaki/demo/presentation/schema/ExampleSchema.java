@@ -7,12 +7,17 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
-import nezaki.demo.infrastructure.entity.ExampleTable;
+import nezaki.demo.infrastructure.dbexample.entity.ExampleTable;
 
 @Getter
 public class ExampleSchema {
 
-  @Schema(title = "id title", description = "id description", example = "1", required = true)
+  @Schema(
+      title = "id title",
+      description = "id description",
+      example = "1",
+      required = true,
+      accessMode = Schema.AccessMode.READ_ONLY)
   private long id;
 
   @Schema(
@@ -45,7 +50,7 @@ public class ExampleSchema {
   @Schema(
       title = "exampleDatetime title",
       description = "exampleDatetime description",
-      // example = "2021/01/01T01:02:03.456Z",
+      example = "2021-01-01T01:02:03.456+00:00",
       required = true)
   private Date exampleDatetime;
 

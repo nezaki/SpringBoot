@@ -1,9 +1,9 @@
-package nezaki.demo.infrastructure.repository;
+package nezaki.demo.infrastructure.dbexample.repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
-import nezaki.demo.infrastructure.entity.ExampleTable;
+import nezaki.demo.infrastructure.dbexample.entity.ExampleTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
