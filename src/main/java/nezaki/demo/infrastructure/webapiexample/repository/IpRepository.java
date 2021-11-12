@@ -15,8 +15,6 @@ public class IpRepository {
   public static final String URL = "https://ipapi.co/126.67.83.5/json";
 
   public Ip get() {
-    Ip ip = restTemplate.getForObject(URL, Ip.class);
-    log.debug(ip.toString());
-    return ip;
+    return restTemplate.getForObject(URL, Ip.class);
   }
 }
