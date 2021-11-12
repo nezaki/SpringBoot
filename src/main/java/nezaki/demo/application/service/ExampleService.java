@@ -1,5 +1,6 @@
 package nezaki.demo.application.service;
 
+import java.util.Optional;
 import nezaki.demo.infrastructure.entity.ExampleTable;
 import nezaki.demo.infrastructure.repository.ExampleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,12 @@ public class ExampleService {
   @Autowired private ExampleRepository exampleRepository;
 
   @Transactional(rollbackFor = Exception.class)
-  public ExampleTable selectOne(int exampleId) {
-    return exampleRepository.selectOne(exampleId);
+  public Optional<ExampleTable> selectOne(int id) {
+    return exampleRepository.selectOne(id);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public ExampleTable insert(ExampleTable exampleTable) {
+    return exampleRepository.insert(exampleTable);
   }
 }

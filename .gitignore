@@ -30,11 +30,12 @@ out/
 .idea/jarRepositories.xml
 .idea/runConfigurations.xml
 .idea/vcs.xml
-/shelf/
-/workspace.xml
+.idea/shelf/
+.idea/workspace.xml
 # Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
+.idea/dataSources/
+.idea/dataSources.local.xml
+.idea/dataSources.xml
 # Editor-based HTTP Client requests
 /httpRequests/
 

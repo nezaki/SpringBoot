@@ -1,11 +1,16 @@
 package nezaki.demo.infrastructure.repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Optional;
 import nezaki.demo.infrastructure.entity.ExampleTable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,10 +18,15 @@ public class ExampleRepository {
 
   @Autowired private JdbcTemplate jdbc;
 
-  public ExampleTable selectOne(int id) {
-    String sql = "select * from example where id = ?";
-    RowMapper<ExampleTable> rowMapper = new BeanPropertyRowMapper<ExampleTable>(ExampleTable.class);
-    return jdbc.queryForObject(sql, rowMapper, id);
+  public Optional<ExampleTable> selectOne(int id) {
+    try {
+      String sql = "select * from example where id = ? ";
+      RowMapper<ExampleTable> rowMapper =
+          new BeanPropertyRowMapper<ExampleTable>(ExampleTable.class);
+      return Optional.ofNullable(jdbc.queryForObject(sql, rowMapper, id));
+    } catch (EmptyResultDataAccessException ex) {
+      return Optional.empty();
+    }
   }
 
   public List<ExampleTable> selectAll() {
@@ -25,44 +35,50 @@ public class ExampleRepository {
     return jdbc.query(sql, rowMapper);
   }
 
-  public int insertOne(ExampleTable exampleTable) {
+  public ExampleTable insert(ExampleTable exampleTable) {
     String sql =
-        "INSERT INTO example(example_string,"
-            + " example_number,"
-            + " example_boolean,"
-            + "example_datetime )"
-            + " VALUES(?, ?, ?, ?)";
-    int rowNumber =
-        jdbc.update(
-            sql,
-            exampleTable.getExampleString(),
-            1,
-            exampleTable.isExampleBoolean(),
-            exampleTable.getExampleDatetime());
-    return rowNumber;
+        "INSERT INTO example("
+            + "example_string,"
+            + "example_number,"
+            + "example_boolean,"
+            + "example_datetime)"
+            + "VALUES(?, ?, ?, ?)";
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    jdbc.update(
+        connection -> {
+          PreparedStatement ps = connection.prepareStatement(sql, new String[] {"ID"});
+          ps.setString(1, exampleTable.getExampleString());
+          ps.setInt(2, exampleTable.getExampleNumber());
+          ps.setBoolean(3, exampleTable.isExampleBoolean());
+          ps.setDate(4, new java.sql.Date(exampleTable.getExampleDatetime().getTime()));
+          return ps;
+        },
+        keyHolder);
+    exampleTable.setId(keyHolder.getKey().longValue());
+    return exampleTable;
   }
 
-  public int updateOne(ExampleTable exampleTable) {
+  public void update(ExampleTable exampleTable, int id) {
     String sql =
-        "UPDATE  example SET "
-            + " example_string = ? ,"
-            + " example_number = ? ,"
-            + " example_boolean = ? ,"
-            + " example_datetime = ? WHERE id = ? ";
-    int rowNumber =
-        jdbc.update(
-            sql,
-            exampleTable.getExampleString(),
-            exampleTable.getExampleNumber(),
-            exampleTable.isExampleBoolean(),
-            exampleTable.getExampleDatetime(),
-            exampleTable.getId());
-    return rowNumber;
+        "UPDATE example SET "
+            + "example_string = ? ,"
+            + "example_number = ? ,"
+            + "example_boolean = ? ,"
+            + "example_datetime = ? "
+            + "WHERE id = ? ";
+
+    jdbc.update(
+        sql,
+        exampleTable.getExampleString(),
+        exampleTable.getExampleNumber(),
+        exampleTable.isExampleBoolean(),
+        exampleTable.getExampleDatetime(),
+        id);
   }
 
-  public int deleteOne(String id) {
+  public void delete(int id) {
     String sql = "DELETE FROM example WHERE id = ?";
-    int rowNumber = jdbc.update(sql, id);
-    return rowNumber;
+    jdbc.update(sql, id);
   }
 }

@@ -6,12 +6,14 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import lombok.Getter;
 import nezaki.demo.infrastructure.entity.ExampleTable;
 
+@Getter
 public class ExampleSchema {
 
   @Schema(title = "id title", description = "id description", example = "1", required = true)
-  private final long id;
+  private long id;
 
   @Schema(
       title = "exampleString title",
@@ -20,7 +22,7 @@ public class ExampleSchema {
       required = true)
   @NotBlank
   @Size(min = 2, max = 64)
-  private final String exampleString;
+  private String exampleString;
 
   @Schema(
       title = "exampleNumber title",
@@ -31,21 +33,23 @@ public class ExampleSchema {
       exclusiveMaximum = false)
   @Min(1)
   @Max(100)
-  private final int exampleNumber;
+  private int exampleNumber;
 
   @Schema(
       title = "exampleBoolean title",
       description = "exampleBoolean description",
       example = "true",
       required = true)
-  private final boolean exampleBoolean;
+  private boolean exampleBoolean;
 
   @Schema(
       title = "exampleDatetime title",
       description = "exampleDatetime description",
       // example = "2021/01/01T01:02:03.456Z",
       required = true)
-  private final Date exampleDatetime;
+  private Date exampleDatetime;
+
+  public ExampleSchema() {}
 
   public ExampleSchema(
       long id,
@@ -66,25 +70,5 @@ public class ExampleSchema {
     this.exampleNumber = exampleTable.getExampleNumber();
     this.exampleBoolean = exampleTable.isExampleBoolean();
     this.exampleDatetime = exampleTable.getExampleDatetime();
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public String getExampleString() {
-    return exampleString;
-  }
-
-  public int getExampleNumber() {
-    return exampleNumber;
-  }
-
-  public boolean isExampleBoolean() {
-    return exampleBoolean;
-  }
-
-  public Date getExampleDatetime() {
-    return exampleDatetime;
   }
 }
