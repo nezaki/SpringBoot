@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Date;
+import java.util.Optional;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -31,27 +32,30 @@ public class ExampleSchema {
       example = "1",
       required = true,
       nullable = true,
+      exclusiveMinimum = false,
+      exclusiveMaximum = false,
       accessMode = Schema.AccessMode.READ_ONLY)
+  @Min(1)
+  @Max(4294967295L)
   private long id;
 
-  /**
+  /*
    * NotNull
    *   null: Error
    *   空文字: OK
    *   半角スペースだけ: OK
-   *   全角スペースだけ: OK
    *
    * NotEmpty
    *   null: Error
    *   空文字: Error
    *   半角スペースだけ: OK
-   *   全角スペースだけ: OK
    *
    * NotBlank
    *   null: Error
    *   空文字: Error
    *   半角スペースだけ: Error
-   *   全角スペースだけ: OK
+   *
+   * ※全てのパターンで全角スペースだけはOKとなる
    */
   @Schema(
       title = "exampleString",
@@ -60,11 +64,10 @@ public class ExampleSchema {
       defaultValue = "デフォルト値",
       required = true)
   @NotBlank
-  @Size(min = 1, max = 64)
+  @Size(min = 1, max = 32)
   private String exampleString;
 
-  /**
-   * exclusiveMinimum, exclusiveMaximum
+  /* exclusiveMinimum, exclusiveMaximum
    * Min, Maxで指定した値を含めない
    * true: 含めない(<, >)
    * false: 含める(<=, >=)
@@ -76,9 +79,9 @@ public class ExampleSchema {
       required = true,
       exclusiveMinimum = false,
       exclusiveMaximum = false)
-  @Min(1)
-  @Max(100)
   @NotNull
+  @Min(1)
+  @Max(4294967295L)
   private int exampleNumber;
 
   @Schema(
@@ -137,8 +140,7 @@ public class ExampleSchema {
       example = "test@example.com",
       required = true,
       format = "email")
-  @Email
-  private String exampleEmail;
+  private Optional<@Email String> exampleEmail;
 
   @Schema(
       title = "exampleUuid",
@@ -146,8 +148,12 @@ public class ExampleSchema {
       example = "c3dc7c29-2749-4fbf-942f-53fe60953f5b",
       required = false,
       format = "uuid")
-  @Pattern(regexp = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
-  private String exampleUuid;
+  private Optional<
+          @Pattern(
+              regexp =
+                  "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+          String>
+      exampleUuid;
 
   @Schema(hidden = true)
   @AssertTrue(message = "this.exampleBoolean && this.exampleEmail.equals(\"\")")

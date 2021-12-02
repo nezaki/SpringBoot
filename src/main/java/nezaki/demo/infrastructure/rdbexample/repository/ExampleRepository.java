@@ -2,6 +2,7 @@ package nezaki.demo.infrastructure.rdbexample.repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 import nezaki.demo.infrastructure.rdbexample.entity.ExampleTable;
@@ -62,8 +63,17 @@ public class ExampleRepository {
           ps.setBoolean(3, exampleTable.isExampleBoolean());
           ps.setTimestamp(4, new Timestamp(exampleTable.getExampleDatetime().getTime()));
           ps.setString(5, exampleTable.getExampleEnum());
-          ps.setString(6, exampleTable.getExampleEmail());
-          ps.setString(7, exampleTable.getExampleUuid());
+          // Java9以降であれば、ifPresentOrElseを使う
+          if (exampleTable.getExampleEmail().isPresent()) {
+            ps.setString(6, exampleTable.getExampleEmail().get());
+          } else {
+            ps.setNull(6, Types.NULL);
+          }
+          if (exampleTable.getExampleUuid().isPresent()) {
+            ps.setString(7, exampleTable.getExampleUuid().get());
+          } else {
+            ps.setNull(7, Types.NULL);
+          }
           return ps;
         },
         keyHolder);

@@ -1,6 +1,7 @@
 package nezaki.demo.infrastructure.webapiexample.entity;
 
 import java.util.Date;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,8 +17,8 @@ public class WebApiExampleEntity {
   private boolean exampleBoolean;
   private Date exampleDatetime;
   private String exampleEnum;
-  private String exampleEmail;
-  private String exampleUuid;
+  private Optional<String> exampleEmail;
+  private Optional<String> exampleUuid;
 
   public WebApiExampleEntity(ExampleSchema ex) {
     this.id = ex.getId();

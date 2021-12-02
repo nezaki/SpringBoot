@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Optional;
 import nezaki.demo.presentation.schema.ExampleSchema;
 import nezaki.demo.util.DatetimeUtil;
 import org.junit.jupiter.api.Test;
@@ -34,8 +35,8 @@ class ExampleControllerTests {
     boolean exampleBoolean = true;
     Date exampleDatetime = DatetimeUtil.parseDate("2021-01-02 03:04:05");
     ExampleSchema.StatusEnum exampleEnum = ExampleSchema.StatusEnum.AVAILABLE;
-    String exampleEmail = "test@example.com";
-    String exampleUuid = "6CA99996-8621-4499-A6C7-8C9A41D5A057";
+    Optional<String> exampleEmail = Optional.of("test@example.com");
+    Optional<String> exampleUuid = Optional.of("6CA99996-8621-4499-A6C7-8C9A41D5A057");
 
     ResponseEntity<ExampleSchema> getResult =
         this.testRestTemplate.getForEntity(url + "/" + id, ExampleSchema.class);
@@ -63,8 +64,8 @@ class ExampleControllerTests {
     boolean exampleBoolean = true;
     Date exampleDatetime = DatetimeUtil.getCurrentDate();
     ExampleSchema.StatusEnum exampleEnum = ExampleSchema.StatusEnum.AVAILABLE;
-    String exampleEmail = "test@example.com";
-    String exampleUuid = "c3dc7c29-2749-4fbf-942f-53fe60953f5b";
+    Optional<String> exampleEmail = Optional.of("test@example.com");
+    Optional<String> exampleUuid = Optional.of("c3dc7c29-2749-4fbf-942f-53fe60953f5b");
     ExampleSchema exampleSchema =
         new ExampleSchema(
             id,
