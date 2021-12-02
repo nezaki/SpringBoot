@@ -1,8 +1,6 @@
 package nezaki.demo.presentation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,9 +8,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import nezaki.demo.application.service.ExampleService;
-import nezaki.demo.infrastructure.dbexample.entity.ExampleTable;
+import nezaki.demo.infrastructure.rdbexample.entity.ExampleTable;
 import nezaki.demo.presentation.schema.ExampleSchema;
+import nezaki.demo.presentation.schema.ListExampleSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-@Tag(name = "Examples", description = "example api description")
+@Tag(name = "Example", description = "example api description")
 @RestController
 @RequestMapping("/examples")
 public class ExampleController {
 
-  @Autowired private ExampleService exampleService;
+  @Autowired ExampleService exampleService;
 
   @Operation(
       summary = "一件取得APIのサンプル",
@@ -42,14 +42,14 @@ public class ExampleController {
         @ApiResponse(
             responseCode = "200",
             content = @Content(schema = @Schema(implementation = ExampleSchema.class))),
-        @ApiResponse(responseCode = "404", content = @Content)
+        @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
       })
   @GetMapping(
       value = "/{exampleId}",
       produces = {"application/json"})
   public ExampleSchema getExample(@PathVariable int exampleId) {
     ExampleTable exampleTable =
-        exampleService
+        this.exampleService
             .selectOne(exampleId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     return new ExampleSchema(exampleTable);
@@ -63,14 +63,13 @@ public class ExampleController {
       value = {
         @ApiResponse(
             responseCode = "200",
-            content =
-                @Content(
-                    array = @ArraySchema(schema = @Schema(implementation = ExampleSchema.class))))
+            content = @Content(schema = @Schema(implementation = ListExampleSchema.class))),
       })
   @GetMapping(produces = {"application/json"})
-  public List<ExampleSchema> getExamples() {
-    List<ExampleTable> examples = exampleService.selectAll();
-    return examples.stream().map(ExampleSchema::new).collect(Collectors.toList());
+  public ListExampleSchema getExamples() {
+    List<ExampleTable> examples = this.exampleService.selectAll();
+    return new ListExampleSchema(
+        examples.stream().map(ExampleSchema::new).collect(Collectors.toList()));
   }
 
   @Operation(
@@ -86,9 +85,9 @@ public class ExampleController {
   @PostMapping(
       consumes = {"application/json"},
       produces = {"application/json"})
-  public ExampleSchema insert(@Parameter(required = true) @RequestBody ExampleSchema requestBody) {
-    ExampleTable exampleTable = new ExampleTable(requestBody);
-    ExampleTable insertedExampleTable = exampleService.insert(exampleTable);
+  public ExampleSchema insert(@RequestBody @Valid ExampleSchema exampleSchema) {
+    ExampleTable exampleTable = new ExampleTable(exampleSchema);
+    ExampleTable insertedExampleTable = this.exampleService.insert(exampleTable);
     return new ExampleSchema(insertedExampleTable);
   }
 
@@ -107,13 +106,9 @@ public class ExampleController {
       consumes = {"application/json"},
       produces = {"application/json"})
   public ExampleSchema update(
-      @PathVariable int exampleId,
-      @Parameter(required = true) @RequestBody ExampleSchema exampleTableSchema) {
-    exampleService
-        .selectOne(exampleId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    ExampleTable exampleTable = new ExampleTable(exampleTableSchema);
-    exampleService.update(exampleTable, exampleId);
+      @PathVariable int exampleId, @RequestBody @Valid ExampleSchema exampleSchema) {
+    ExampleTable exampleTable = new ExampleTable(exampleSchema);
+    this.exampleService.update(exampleTable, exampleId);
     exampleTable.setId(exampleId);
     return new ExampleSchema(exampleTable);
   }
@@ -125,10 +120,7 @@ public class ExampleController {
   @ApiResponses(value = {@ApiResponse(responseCode = "204")})
   @DeleteMapping(value = "/{exampleId}")
   public ResponseEntity<Void> delete(@PathVariable int exampleId) {
-    exampleService
-        .selectOne(exampleId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    exampleService.delete(exampleId);
+    this.exampleService.delete(exampleId);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

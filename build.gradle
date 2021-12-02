@@ -1,5 +1,16 @@
+import org.yaml.snakeyaml.Yaml
+
+buildscript {
+    repositories{
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.yaml:snakeyaml:1.29"
+    }
+}
+
 plugins {
-    id 'org.springframework.boot' version '2.5.5'
+    id 'org.springframework.boot' version '2.5.6'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'org.flywaydb.flyway' version '8.0.1'
@@ -11,28 +22,38 @@ plugins {
 group = 'nezaki'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.6'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.5.6'
-    implementation 'org.springframework.boot:spring-boot-starter-security:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springdoc:springdoc-openapi-ui:1.5.12'
-    implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'mysql:mysql-connector-java:8.0.26'
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.5.6'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+def env = System.getenv( 'SPRING_PROFILES_ACTIVE' )
+env = env==null ? "local" : env
+def path = env=="test" ? "$projectDir/src/test/resources/" : "$projectDir/src/main/resources/"
+def applicationYml = new Yaml().load( new File( path + "application-" + env  +".yml").newInputStream() )
+def database = applicationYml.spring.datasource.url.split("/")[3]
 flyway {
-    url = 'jdbc:mysql://localhost:13306/'
-    user = 'root'
-    password = 'root'
-    schemas = ['springboot']
+    url = "${applicationYml.spring.datasource.url}"
+    user = "${applicationYml.spring.datasource.username}"
+    password = "${applicationYml.spring.datasource.password}"
+    schemas = ["${database}"]
+}
+
+test {
+    useJUnitPlatform()
 }
 
 checkstyle {
@@ -42,10 +63,15 @@ checkstyle {
 
 spotless {
     java {
+        target 'src/*/java/**/*.java'
         importOrder()
         removeUnusedImports()
         googleJavaFormat()
     }
+}
+
+bootJar {
+    launchScript()
 }
 
 tasks.withType(JavaCompile) {

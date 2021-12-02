@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+export SPRING_PROFILES_ACTIVE=test
+
+./gradlew flywayClean flywayMigrate
+./gradlew clean
+./gradlew test

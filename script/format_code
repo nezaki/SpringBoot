@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+export SPRING_PROFILES_ACTIVE=local
+
+./gradlew clean spotlessJavaApply
