@@ -1,12 +1,13 @@
 package nezaki.demo.application.service;
 
 import java.util.List;
-import java.util.Optional;
 import nezaki.demo.infrastructure.rdbexample.entity.ExampleTable;
 import nezaki.demo.infrastructure.rdbexample.repository.ExampleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ExampleService {
@@ -25,8 +26,10 @@ public class ExampleService {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public Optional<ExampleTable> selectOne(int id) {
-    return exampleRepository.selectOne(id);
+  public ExampleTable selectOne(int id) {
+    return exampleRepository
+        .selectOne(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
   }
 
   @Transactional(rollbackFor = Exception.class)

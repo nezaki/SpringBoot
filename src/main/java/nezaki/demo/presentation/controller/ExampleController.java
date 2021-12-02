@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @Tag(name = "Example", description = "example api description")
 @RestController
@@ -48,10 +47,7 @@ public class ExampleController {
       value = "/{exampleId}",
       produces = {"application/json"})
   public ExampleSchema getExample(@PathVariable int exampleId) {
-    ExampleTable exampleTable =
-        this.exampleService
-            .selectOne(exampleId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    ExampleTable exampleTable = this.exampleService.selectOne(exampleId);
     return new ExampleSchema(exampleTable);
   }
 
