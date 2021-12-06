@@ -49,3 +49,9 @@ jobs:
         export SPRING_PROFILES_ACTIVE=test
         ./gradlew clean
         ./gradlew test
+        
+    - name: Upload Test Result
+      uses: actions/upload-artifact@v2
+      with:
+        name: test
+        path: build/reports/**/*
