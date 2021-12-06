@@ -2,4 +2,4 @@
 
 export SPRING_PROFILES_ACTIVE=local
 
-./gradlew clean spotlessJavaApply
+./gradlew cleanSpotlessJavaApply spotlessJavaApply

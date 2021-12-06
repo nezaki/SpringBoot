@@ -2,4 +2,4 @@
 
 export SPRING_PROFILES_ACTIVE=local
 
-./gradlew clean checkstyleMain
+./gradlew cleanCheckstyleMain checkstyleMain

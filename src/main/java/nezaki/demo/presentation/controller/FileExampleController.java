@@ -5,15 +5,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.core.io.PathResource;
+import nezaki.demo.application.service.FileExampleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/fileexamples")
 public class FileExampleController {
+
+  @Autowired private FileExampleService fileExampleService;
 
   @Operation(
       summary = "ファイルダウンロードAPIのサンプル",
@@ -48,8 +45,7 @@ public class FileExampleController {
       produces = {"application/octet-stream"})
   public ResponseEntity<Resource> download(
       HttpServletResponse response, @PathVariable String filename) throws IOException {
-    Path path = Paths.get("./tmp/" + filename);
-    Resource resource = new PathResource(path);
+    Resource resource = fileExampleService.download(filename);
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_OCTET_STREAM)
         .header(
@@ -66,12 +62,7 @@ public class FileExampleController {
       value = {@ApiResponse(responseCode = "204", description = "No Content", content = @Content)})
   @PostMapping(consumes = {"multipart/form-data"})
   public ResponseEntity<Void> upload(MultipartFile multipartFile) throws IOException {
-    File uploadFile = new File("./tmp/" + multipartFile.getOriginalFilename());
-    byte[] bytes = multipartFile.getBytes();
-    BufferedOutputStream uploadFileStream =
-        new BufferedOutputStream(new FileOutputStream(uploadFile));
-    uploadFileStream.write(bytes);
-    uploadFileStream.close();
+    fileExampleService.upload(multipartFile);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
