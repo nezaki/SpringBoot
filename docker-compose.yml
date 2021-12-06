@@ -7,7 +7,7 @@ services:
     container_name: SpringBootMySQL
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: springboot
+      MYSQL_DATABASE: testspringboot
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - ~/docker/SpringBoot/db/data:/var/lib/mysql
