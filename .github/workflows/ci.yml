@@ -38,9 +38,14 @@ jobs:
           sleep 1
         done
 
+    - name: DB Migrate
+      run: |
+        export SPRING_PROFILES_ACTIVE=test
+        ./gradlew flywayClean
+        ./gradlew flywayMigrate
+
     - name: Test
       run: |
         export SPRING_PROFILES_ACTIVE=test
-        ./gradlew flywayClean flywayMigrate
         ./gradlew clean
         ./gradlew test
