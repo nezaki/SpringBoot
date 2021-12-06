@@ -24,8 +24,12 @@ jobs:
         java-version: '8'
         distribution: 'adopt'
 
-    - name: Build with Gradle
+    - name: Check Style
       run: |
         export SPRING_PROFILES_ACTIVE=test
         ./gradlew clean
         ./gradlew checkstyleMain
+
+    - name: Docker Compose Run
+      run: |
+        docker-compose up -d
