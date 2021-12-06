@@ -1,24 +1,20 @@
 # SpringBoot
+
+* 初期構築
 ```
-% chmod +x ./gradlew
+chmod +x ./gradlew
+./gradlew build
+docker-compose up -d
+./gradlew flywayMigrate
 ```
 
+* アプリケーション起動
 ```
-% docker-compose up -d
-% ./gradlew flywayMigrate
-```
-
-```
-% ./gradlew bootRun
-http://127.0.0.1:18080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+./gradlew bootRun
 ```
 
+* jarの作成〜起動
 ```
-% ./gradlew checkstyleMain
-% ./gradlew spotlessJavaApply
-```
-
-```
-% ./gradlew build
-% ./gradlew spotlessJavaApply
+./gradlew clean bootJar
+java -jar build/libs/dmb-0.0.1-SNAPSHOT.jar --spring.profiles.active=local
 ```
